@@ -1,3 +1,2 @@
-awsKeyPair.pem
-my-key.pem
+*.pem
 
