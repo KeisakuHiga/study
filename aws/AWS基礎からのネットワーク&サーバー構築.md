@@ -1,77 +1,145 @@
-# AWS基礎からのネットワーク&サーバー構築
+# AWS 基礎からのネットワーク&サーバー構築
 
-## Apache HTTP Server を インストールする
+## 1. ネットワークを構築する / 実験用の VPC を作成する
 
-## SSH で AWS のインスタンスに接続
+1. IP アドレス
 
-`$ ssh -i my-key.pem ec2-user@35.72.139.60`
+   1. パブリック IP アドレス  
+      インターネットに接続する際に用いる IP アドレスのこと
+   1. プライベート IP アドレス
+      インターネットで使われない IP アドレスのこと  
+      |IP アドレスの範囲|
+      |---|
+      |10.0.0.0 ~ 10.255.255.255|
+      |172.16.0.0 ~ 172.31.255.255|
+      |192.168.0.0 ~ 192.168.255.255|
+   1. IP アドレス範囲と表記方法  
+      「ネットワーク部」と「ホスト部」があるが、「ホスト部」に割り当てる IP アドレスの範囲は **「２の n 乗個で区切る」** ルールがある。よく使われるのは「256 個(後ろから 8 ビット分)」「65536 個(後ろから 16 ビット分)」。
 
-## install Apach
+1. CIDR 表記とサブネットマスク表記  
+   「ネットワーク部」と「ホスト部」がどこで区切られているかを簡単に表す。
 
-`$ sudo yum -y install httpd`
+   1. 普通の表記  
+      192.168.0.0 ~ 192.168.255.255 (16 ビットがネットワーク部)  
+      192.168.1.0 ~ 192.168.1.255 (24 ビットがネットワーク部)
 
--y means that user will not check the instalation detail and install it instantly
+   1. CIDR 表記  
+      192.168.0.0/16 (16 ビットがネットワーク部)  
+      192.168.1.0/24 (24 ビットがネットワーク部)
 
-## start Apach
+   1. サブネットマスク表記  
+      192.168.0.0/255.255.0.0 (16 ビットがネットワーク部)  
+      192.168.1.0/255.255.255.0 (24 ビットがネットワーク部)
 
-`$ sudo service httpd start`
+1. VPC を作る
 
-## configurate Apach will be started when the server starts
+   1. AWS management console から VPC を 選択
+   1. リージョン northeast を選択
+   1. VPC の作成を押下
+   1. ネームタグに名前をつける
+   1. CIDR block 「10.0.0.0/16」で作成する
 
-`$ sudo chkconfig httpd on`
+1. サブネット
 
-## check if the configulation has been set properly
+   1. 割り当てられた CIDER ブロックを、そのまま使わずに、小さな CIDER ブロックに分割して利用する
+   1. 上記の VPC は 「/16」でネットワークを区切った（10.0.0.0 ~ 10.0.255.255、つまり 65,536 個の IP アドレスがある）けれど、今回、サブネットは「/24」で区切る、つまり、256 アドレス \* 256 個サブネット
+   1. サブネットに分ける目的は、障害発生時に備えた「物理的な隔離」と「セキュリティ上の理由（サブネットでセキュリティの強弱をつけたい場合など）」があげられる
 
-`$ sudo chkconfig --list httpd`
+1. パブリックサブネットを作る
 
-## check processes
+   1. サブネットに作成する
+   1. 名前をつける（パブリックサブネット、とか）
+   1. 分割したい VPC を選択する
+   1. CIDR ブロックを設定する（10.0.1.0/24）← 8 bit がホスト部
+   1. 作成押下
 
-`$ ps -ax | grep httpd`
-481 ? Ss 0:00 /usr/sbin/httpd -DFOREGROUND
-482 ? Sl 0:00 /usr/sbin/httpd -DFOREGROUND
-483 ? Sl 0:00 /usr/sbin/httpd -DFOREGROUND
-484 ? Sl 0:00 /usr/sbin/httpd -DFOREGROUND
-485 ? Sl 0:00 /usr/sbin/httpd -DFOREGROUND
-486 ? Sl 0:00 /usr/sbin/httpd -DFOREGROUND
-588 pts/5 S+ 0:00 grep --color=auto httpd
+1. インターネットゲートウェイの作成
 
-## check network status
+   1. 作成した VPC とインターネットが繋がるためのポイントが「インターネットゲートウェイ」
+   1. インターネットゲートウェイが無いと、そもそも外界と繋がれないから大事な存在
 
-`$ sudo lsof -i -n -P`
+1. ルーターとルートテーブル
 
-COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
-sshd 411 root 3u IPv4 55148 0t0 TCP 10.0.1.10:22->106.154.132.161:49369 (ESTABLISHED)
-sshd 429 ec2-user 3u IPv4 55148 0t0 TCP 10.0.1.10:22->106.154.132.161:49369 (ESTABLISHED)
-httpd 481 root 4u IPv6 55574 0t0 TCP _:80 (LISTEN)
-httpd 482 apache 4u IPv6 55574 0t0 TCP _:80 (LISTEN)
-httpd 483 apache 4u IPv6 55574 0t0 TCP _:80 (LISTEN)
-httpd 484 apache 4u IPv6 55574 0t0 TCP _:80 (LISTEN)
-httpd 485 apache 4u IPv6 55574 0t0 TCP _:80 (LISTEN)
-httpd 486 apache 4u IPv6 55574 0t0 TCP _:80 (LISTEN)
-chronyd 2498 chrony 5u IPv4 15340 0t0 UDP 127.0.0.1:323
-chronyd 2498 chrony 6u IPv6 15341 0t0 UDP [::1]:323
-rpcbind 2509 rpc 6u IPv4 15586 0t0 UDP _:111
-rpcbind 2509 rpc 7u IPv4 15649 0t0 UDP _:981
-rpcbind 2509 rpc 8u IPv4 15650 0t0 TCP _:111 (LISTEN)
-rpcbind 2509 rpc 9u IPv6 15651 0t0 UDP _:111
-rpcbind 2509 rpc 10u IPv6 15652 0t0 UDP _:981
-rpcbind 2509 rpc 11u IPv6 15653 0t0 TCP _:111 (LISTEN)
-dhclient 2724 root 6u IPv4 16142 0t0 UDP _:68
-dhclient 2815 root 5u IPv6 16430 0t0 UDP [fe80::c1f:daff:fe3b:e493]:546
-master 2942 root 13u IPv4 17144 0t0 TCP 127.0.0.1:25 (LISTEN)
-sshd 3187 root 3u IPv4 19241 0t0 TCP _:22 (LISTEN)
-sshd 3187 root 4u IPv6 19250 0t0 TCP \*:22 (LISTEN)
-sshd 3269 root 3u IPv4 20642 0t0 TCP 10.0.1.10:22->106.154.138.58:64877 (ESTABLISHED)
-sshd 3287 ec2-user 3u IPv4 20642 0t0 TCP 10.0.1.10:22->106.154.138.58:64877 (ESTABLISHED)
-sshd 3331 root 3u IPv4 21212 0t0 TCP 10.0.1.10:22->106.154.138.58:64970 (ESTABLISHED)
-sshd 3349 ec2-user 3u IPv4 21212 0t0 TCP 10.0.1.10:22->106.154.138.58:64970 (ESTABLISHED)
-sshd 3450 root 3u IPv4 21990 0t0 TCP 10.0.1.10:22->106.154.138.58:65243 (ESTABLISHED)
-sshd 3468 ec2-user 3u IPv4 21990 0t0 TCP 10.0.1.10:22->106.154.138.58:65243 (ESTABLISHED)
-sshd 3600 root 3u IPv4 23746 0t0 TCP 10.0.1.10:22->106.154.138.58:65495 (ESTABLISHED)
-sshd 3618 ec2-user 3u IPv4 23746 0t0 TCP 10.0.1.10:22->106.154.138.58:65495 (ESTABLISHED)
-sshd 32700 root 3u IPv4 54323 0t0 TCP 10.0.1.10:22->106.154.138.58:49249 (ESTABLISHED)
-sshd 32718 ec2-user 3u IPv4 54323 0t0 TCP 10.0.1.10:22->106.154.138.58:49249 (ESTABLISHED)
+   1. ルーターは沢山あって、受け取ったパケットの中にある「宛先 IP アドレス」確認して、転送先ネットワークを決める
+   1. 「宛先 IP アドレス」に最短で到達させるためにはどのネットワークに飛ばせばいいかを考える
+   1. その時に使うのが「ルートテーブル」で、そこにはどのネットワークに流すかの設定が書いてある
+   1. ルートテーブルにネットワーク情報が無いと、うまいこと転送できないから、事前に設定する必要あり
 
-## check DNS server
+1. デフォルトゲートウェイをインターネットに向けて設定する
+   1. ルートテーブルの作成
+      1. ネームタグで名前をつける（パブリックルートテーブル、とか）
+      1. 作成済み VPC を選択する
+      1. 作成ボタン押下
+   1. ルートテーブルをサブネットに割り当てる
+      1. 作成済みルートテーブルを選択
+      1. サブネットの関連付けから編集
+      1. 割り当てたいサブネットにチェックを付けて保存
+   1. デフォルトゲートウェイをインターネットゲートウェイに設定する
+      1. 作成済みルートテーブルを選択
+      1. ルートから編集
+      1. 送信先に「0.0.0.0/0」を入力、ターゲットに「igw-xxxx」を選択して保存
+      1. （確認１）サブネットから、「パブリックサブネット」の「ルートテーブル」を確認する
+      1. （確認２）「0.0.0.0/0」が、インターネットゲートウェイに設定されていることを確認する
 
-`$ nslookup ec2-35-72-139-60.ap-northeast-1.compute.amazonaws.com`
+## 2. サーバーを構築する
+
+## 3. Web サーバーソフトをインストールする
+
+### Apache HTTP Server を インストールする
+
+1. SSH で AWS のインスタンスに接続
+
+   ```console
+   $ ssh -i my-key.pem ec2-user@xx.xx.xx.xx(パブリックサブネットに立てたサーバーのパブリックDNS)
+   ```
+
+1. install Apach
+
+   ```console
+   $ sudo yum -y install httpd # -y means that user will not check the instalation detail and install it instantly
+   ```
+
+1. start Apach
+
+   ```console
+   $ sudo service httpd start
+   ```
+
+1. configure Apach will be started when the server starts
+
+   ```console
+   $ sudo chkconfig httpd on
+   ```
+
+1. check if the configuration has been set properly
+
+   ```console
+   $ sudo chkconfig --list httpd
+   ```
+
+1. check processes
+
+   ```console
+   $ ps -ax | grep httpd
+   ```
+
+1. check network status
+
+   ```console
+   $ sudo lsof -i -n -P
+   ```
+
+1. check DNS server
+   ```
+   $ nslookup ec2-xx-xx-xx-xx.ap-northeast-1.compute.amazonaws.com(パブリックサブネットに立てたサーバーのパブリックDNS)
+   ```
+
+## 4. HTTP の動きを確認する
+
+## 5. プライベートサブネットを構築する
+
+## 6. NAT を構築する
+
+## 7. DB を用いたブログシステムの構築
+
+## 8. TCP / IP による通信の仕組みを理解する
