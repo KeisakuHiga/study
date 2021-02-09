@@ -142,54 +142,65 @@
 
 ## 3. Web サーバーソフトをインストール
 
-### Apache HTTP Server を インストールする
+1. Apache HTTP Server を インストールする
 
-1. SSH で AWS のインスタンスに接続
+   1. SSH で AWS のインスタンスに接続
 
-   ```console
-   $ ssh -i my-key.pem ec2-user@xx.xx.xx.xx(パブリックサブネットに立てたサーバーのパブリックDNS)
-   ```
+      ```console
+      $ ssh -i my-key.pem ec2-user@xx.xx.xx.xx(パブリックサブネットに立てたサーバーのパブリックDNS)
+      ```
 
-1. install Apach
+   1. install Apach
 
-   ```console
-   $ sudo yum -y install httpd # -y means that user will not check the instalation detail and install it instantly
-   ```
+      ```console
+      $ sudo yum -y install httpd # -y means that user will not check the instalation detail and install it instantly
+      ```
 
-1. start Apach
+   1. start Apach
 
-   ```console
-   $ sudo service httpd start
-   ```
+      ```console
+      $ sudo service httpd start
+      ```
 
-1. configure Apach will be started when the server starts
+   1. configure Apach will be started when the server starts
 
-   ```console
-   $ sudo chkconfig httpd on
-   ```
+      ```console
+      $ sudo chkconfig httpd on
+      ```
 
-1. check if the configuration has been set properly
+   1. check if the configuration has been set properly
 
-   ```console
-   $ sudo chkconfig --list httpd
-   ```
+      ```console
+      $ sudo chkconfig --list httpd
+      ```
 
-1. check processes
+   1. check processes
 
-   ```console
-   $ ps -ax | grep httpd
-   ```
+      ```console
+      $ ps -ax | grep httpd
+      ```
 
-1. check network status
+   1. check network status
 
-   ```console
-   $ sudo lsof -i -n -P
-   ```
+      ```console
+      $ sudo lsof -i -n -P
+      ```
 
-1. check DNS server
-   ```
-   $ nslookup ec2-xx-xx-xx-xx.ap-northeast-1.compute.amazonaws.com(パブリックサブネットに立てたサーバーのパブリックDNS)
-   ```
+   1. check DNS server
+      ```
+      $ nslookup ec2-xx-xx-xx-xx.ap-northeast-1.compute.amazonaws.com(パブリックサブネットに立てたサーバーのパブリックDNS)
+      ```
+
+1. ファイアウォールの設定  
+   今の状態では http 通信はできない。なぜならポート８０番がファイアウォールで拒否されているから！  
+   セキュリティグループの設定を編集してポート８０番への通信を許可するようにしよう。
+
+   1. セキュリティーグループ・WEB-SG の設定画面へ
+   1. インバウンドルールを選択して、タイプ：「カスタムルール」、ポート範囲：「８０」、送信元：「0.0.0.0/0」（全てのホスト）で保存。
+   1. Web サーバーのパブリック IP アドレスをブラウザから叩いてみて疎通確認する。（http://xx.xx.xx.xx）
+   1. Apach のウェルカムページが表示されれば成功！
+  
+1. Domain Name System
 
 ## 4. HTTP の動きを確認する
 
