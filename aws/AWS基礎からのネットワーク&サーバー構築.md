@@ -229,7 +229,11 @@
 1. 実験用サーバーに接続する
 1. Node.js をインストールする  
    [AWS のチュートリアルからインストール方法がわかります！](https://docs.aws.amazon.com/ja_jp/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html)
-   `console $ cd ~ $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash $ . ~/.nvm/nvm.sh $ nvm install node $ node -e "console.log('Running Node.js ' + process.version)" # Running Node.js VERSION ← のように表示されたら成功！ `
+
+   ```console
+   $ cd ~ $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+   $ . ~/.nvm/nvm.sh $ nvm install node $ node -e "console.log('Running Node.js ' + process.version)" # Running Node.js VERSION ← のように表示されたら成功！
+   ```
 
 1. app.js を作成して以下のコードをはる
 
@@ -281,6 +285,7 @@
 
       ```console
       $ telnet ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com 8080
+
         Trying 18.179.53.166...
         Connected to ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com.
         Escape character is '^]'.
@@ -301,6 +306,7 @@
 
       ```console
       $ telnet ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com 8080
+
         Trying 18.179.53.166...
         Connected to ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com.
         Escape character is '^]'.
