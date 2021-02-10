@@ -200,7 +200,7 @@
    1. Web サーバーのパブリック IP アドレスをブラウザから叩いてみて疎通確認する。（http://xx.xx.xx.xx）
    1. Apach のウェルカムページが表示されれば成功！
 
-1. VPC 内の EC2 インスタンスへ DNS（Domain Name System）名 が自動で割り振られる設定
+1. VPC 内の EC2 インスタンスへ DNS（Domain Name System）名 が自動で割り振られる設定  
    IP アドレスでの表記は覚えづらいから、DNS 名が便利。EC2 インスタンスへ DNS 名を割り当てる設定をしよう。
 
    1. VPC を選択
@@ -222,29 +222,127 @@
 
 ## 4. HTTP の動きを確認する
 
-    ```console
-    $
-    ```
-    ```console
-    $
-    ```
-    ```console
-    $
-    ```
-    ```console
-    $
-    ```
-    ```console
-    $
-    ```
-    ```console
-    $
-    ```
-    ```console
-    $
-    ```
+`telnet`コマンドを使って HTTP リクエストを投げてみる実験をする
+
+1. 実験用の EC2 インスタンスをパブリックサブネットに立てる
+1. インバウンドルールでポート８０８０番への通信を許可する
+1. 実験用サーバーに接続する
+1. Node.js をインストールする  
+   [AWS のチュートリアルからインストール方法がわかります！](https://docs.aws.amazon.com/ja_jp/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html)
+
+   ```console
+   $ cd ~ $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+   $ . ~/.nvm/nvm.sh 
+   $ nvm install node 
+   $ node -e "console.log('Running Node.js ' + process.version)" # Running Node.js VERSION ← のように表示されたら成功！
+   ```
+
+1. app.js を作成して以下のコードをはる
+
+   ```console
+   $ vi app.js # app.jsを作る
+   ```
+
+   ```js
+   var http = require('http');
+   http
+   	.createServer(function (req, res) {
+   		console.log('Hello World!');
+   		var data = {
+   			RequestHeader: req.headers,
+   		};
+
+   		if (req.method == 'GET') {
+   			response(res, data);
+   		} else {
+   			req.on('data', function (body) {
+   				data.RequestBody = body.toString();
+   				req.on('end', function () {
+   					response(res, data);
+   				});
+   			});
+   		}
+   	})
+   	.listen(8080);
+
+   function response(res, data) {
+   	console.log('request is coming!!');
+   	var json = JSON.stringify(data);
+   	res.writeHead(200, {
+   		'Content-Type': 'application/json',
+   		'Content-Length': json.length,
+   	});
+   	res.end(json);
+   }
+   ```
+
+   ```console
+   $ cat app.js # ちゃんとファイル出来てるか確認。
+   $ node app.js # nodeサーバーを起動する
+   ```
+
+1. ローカルに別のターミナルを開いて、`telnet`で通信してみる！
+
+   1. まずは GET request
+
+      ```console
+      $ telnet ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com 8080
+
+        Trying 18.179.53.166...
+        Connected to ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com.
+        Escape character is '^]'.
+        GET / HTTP/1.1[enter] # 入力後enter
+        User-Agent: OreOreGetRequest[enter][enter] # 入力後enter
+
+        HTTP/1.1 200 OK  # 結果が返ってくる!!
+        Content-Type: application/json
+        Content-Length: 51
+        Date: Wed, 10 Feb 2021 10:20:42 GMT
+        Connection: keep-alive
+        Keep-Alive: timeout=5
+
+        {"RequestHeader":{"user-agent":"OreOreGetRequest"}}
+      ```
+
+   1. 続いて POST request
+
+      ```console
+      $ telnet ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com 8080
+
+        Trying 18.179.53.166...
+        Connected to ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com.
+        Escape character is '^]'.
+        POST / HTTP/1.1
+        User-Agent: OreOrePostRequest
+        Content-Length: 4
+
+        test
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+        Content-Length: 94
+        Date: Wed, 10 Feb 2021 10:24:29 GMT
+        Connection: keep-alive
+        Keep-Alive: timeout=5
+
+        {"RequestHeader":{"user-agent":"OreOrePostRequest","content-length":"4"},"RequestBody":"test"}
+      ```
+
+1. 5.で app.js を起動していたが、そのターミナルには以下のようにログがあるはず
+   ```console
+   [ec2-user@ip-10-0-1-20 ~]$ node app.js
+   Hello World!
+   request is coming!!
+   ```
 
 ## 5. プライベートサブネットを構築する
+
+```console
+$
+```
+
+```console
+$
+```
 
 ## 6. NAT を構築する
 
