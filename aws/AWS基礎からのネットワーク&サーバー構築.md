@@ -212,11 +212,11 @@
 
 1. DNS <-> IP アドレス を確認できる `nslookup`コマンド
    ```console
-   $ nslookup DNS
+   $ nslookup <DNS>
     # IPアドレスが返却される
    ```
    ```console
-   $ nslookup IPアドレス
+   $ nslookup <IPアドレス>
     # DNSが返却される
    ```
 
@@ -232,8 +232,8 @@
 
    ```console
    $ cd ~ $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-   $ . ~/.nvm/nvm.sh 
-   $ nvm install node 
+   $ . ~/.nvm/nvm.sh
+   $ nvm install node
    $ node -e "console.log('Running Node.js ' + process.version)" # Running Node.js VERSION ← のように表示されたら成功！
    ```
 
@@ -286,10 +286,10 @@
    1. まずは GET request
 
       ```console
-      $ telnet ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com 8080
+      $ telnet <ec2インスタンスのIP> 8080
 
         Trying 18.179.53.166...
-        Connected to ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com.
+        Connected to <ec2インスタンスのIP>.
         Escape character is '^]'.
         GET / HTTP/1.1[enter] # 入力後enter
         User-Agent: OreOreGetRequest[enter][enter] # 入力後enter
@@ -307,10 +307,10 @@
    1. 続いて POST request
 
       ```console
-      $ telnet ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com 8080
+      $ telnet <ec2インスタンスのIP> 8080
 
         Trying 18.179.53.166...
-        Connected to ec2-18-179-53-166.ap-northeast-1.compute.amazonaws.com.
+        Connected to <ec2インスタンスのIP>.
         Escape character is '^]'.
         POST / HTTP/1.1
         User-Agent: OreOrePostRequest
@@ -336,13 +336,25 @@
 
 ## 5. プライベートサブネットを構築する
 
-```console
-$
-```
+インターネットから隠された（接続出来ない）サブネットを構築する！セキュリティを高められるよ。そこに DB サーバーを立て流。パブリックサブネットは「10.0.1.0/24」だったけど、プライベートサブネットは「10.0.2.0/24」にする。
 
-```console
-$
-```
+1. プライベートサブネットを作る  
+   作り方は基本的にパブリックサブネットを作るときと一緒。「CIDR ブロック」に「10.0.2.0/24」を設定する。ルートテーブルはデフォルトの状態で、「自身のネットワーク（送信先：10.0.0.0/16）」に対してのルーティングがされているように設定する。なぜならインターネットに接続しないから。
+
+1. DB サーバーを構築する  
+   EC2 タブで Web サーバーを構築したように、DB サーバーを構築する。サブネットは 1.で作成したプライベートサブネットを選択して、自動割り当てパブリック IP は「無効化」とする。またプライベート IP は「10.0.2.10」に設定。セキュリティグループ名は「DB-SG」とし、タイプには SSH に加えて、「MYSQL/Aurora」を選択、送信元を 「任意の場所」に設定。
+
+1. `ping`コマンドで疎通確認！  
+   `ping`コマンドはサーバー間での疎通を確認するときに使うコマンドで、「ICMP（Internet Control Message Protocol）」を用いている。
+   1. この ICMP が通るように「DB-SG」の設定を編集（「全ての ICMP」を許可するように設定）する。
+   1. Web サーバーに接続
+      ```console
+      $ ssh -i my-key ec2-user@<WebサーバーのパブリックIP>
+      ```
+   1. 接続後、DB サーバーに疎通確認！
+      ```console
+      $ ping 10.0.2.10（<DBサーバーのプライベートIP>）
+      ```
 
 ## 6. NAT を構築する
 
