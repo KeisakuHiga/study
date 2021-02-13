@@ -336,7 +336,7 @@
 
 ## 5. プライベートサブネットを構築する
 
-インターネットから隠された（接続出来ない）サブネットを構築する！セキュリティを高められるよ。そこに DB サーバーを立て流。パブリックサブネットは「10.0.1.0/24」だったけど、プライベートサブネットは「10.0.2.0/24」にする。
+インターネットから隠された（接続出来ない）サブネットを構築する！セキュリティを高められるよ。そこに DB サーバーを立てる。パブリックサブネットは「10.0.1.0/24」だったけど、プライベートサブネットは「10.0.2.0/24」にする。
 
 1. プライベートサブネットを作る  
    作り方は基本的にパブリックサブネットを作るときと一緒。「CIDR ブロック」に「10.0.2.0/24」を設定する。ルートテーブルはデフォルトの状態で、「自身のネットワーク（送信先：10.0.0.0/16）」に対してのルーティングがされているように設定する。なぜならインターネットに接続しないから。
@@ -368,8 +368,8 @@
 1.  NAT インスタンス  
     NAT ソフトウェアがあらかじめインストールされた AMI から起動した EC2 インスタンス
 
-1.  NAT ゲートウェイ  
-    NAT 専用に構成された仮想的なコンポーネントで、配置するサブネットを設定するだけで構成できるから簡単！(今回はこっちを使ってみる)
+1.  NAT ゲートウェイ(今回はこっちを使ってみる)  
+    NAT 専用に構成された仮想的なコンポーネントで、配置するサブネットを設定するだけで構成できるから簡単！
 
 1.  パブリックサブネットとプライベートサブネットを NAT でつなげる
 
@@ -406,5 +406,106 @@
     > IPv4 において、0.0.0.0 は全ビットが 0 の IP アドレスであり、無効、不明、または適用外の対象を指定するために使用されるルーティング不可のメタアドレスである。このアドレスには、いくつかの特別な意味が割り当てられている。
 
 ## 7. DB を用いたブログシステムの構築
+
+1. DB サーバーに MySQL をインストールして、WordPress からデータを保存できるようにデータベースを作成する
+
+   1. MySQL のインストール  
+      Web サーバーを踏み台にして DB サーバーに接続して[AWS EC2 AmazonLinux2 MySQL をインストールする](https://qiita.com/miriwo/items/eb09c065ee9bb7e8fe06)
+   1. MySQL の起動と初期設定
+      ```console
+      $ sudo service mysqld start
+      ```
+   1. MySQL の管理者の初期パスワードを確認  
+      `/var/log/mysqld.log`に temporary password が記述されてる。以下のような箇所に`xyz`っていう風に初期パスワードが記載されている
+
+      ```console
+      $ sudo less /var/log/mysqld.log
+
+      ****************　省略　**************************
+      〜〜〜 A temporary password is generated for root@localhost: xyz
+      ****************　省略　**************************
+      ***
+      ```
+
+   1. MySQL の管理者パスワードを設定  
+      上記で確認したパスワードで mysql に接続
+
+      ```console
+      $[ec2-user@ip-10-0-2-10 ~]$ mysql -u root -p
+         Enter password:
+         Welcome to the MySQL monitor.  Commands end with ; or \g.
+         Your MySQL connection id is 12
+         Server version: 8.0.23
+
+         Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+         Oracle is a registered trademark of Oracle Corporation and/or its
+         affiliates. Other names may be trademarks of their respective
+         owners.
+
+         Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+         mysql>
+      ```
+
+      接続できたら、初期パスワードを変更しとく
+
+      ```console
+         mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '大文字、小文字、特殊文字(アスタリスク等)を含む新しいrootユーザのパスワード';
+      ```
+
+      じゃないと怒られる
+
+      ```console
+         mysql> なんかのsqlコマンド
+
+         ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+      ```
+
+   1. WordPress 用のデータベースを作成
+
+      1. （root の初期パスワード変更後）データベースを作成する。DB 名は「wordpress_db」とする。
+         ```console
+         mysql> CREATE DATABASE wordpress_db DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+         ```
+         ※ 文字セット（charset_name）と照合順序（collation_name）指定はこの辺を参考にして  
+         → [MySQL:文字セットと照合順序)](https://www.dbonline.jp/mysql/ini/index5.html)
+      1. ユーザーを作成する。ユーザー名は「wordpress_user」とする。
+         ```console
+         mysql> CREATE USER wordpress_user IDENTIFIED BY '大文字、小文字、特殊文字(アスタリスク等)を含む新しいwordpress_userの為のパスワード';
+         ```
+         ※ ユーザーの作成はこの辺を参考にして  
+         → [MySQL:ユーザーを作成する（CREATE USER 文）)](https://www.dbonline.jp/mysql/user/index1.html)
+      1. 「wordpress_user」に「wordpress_db」に対する全てのアクセス権を与える。
+         ```console
+         mysql> GRANT ALL ON wordpress_db.* TO wordpress_user;
+         ```
+         ※ アクセス権限周りについてはこの辺を参考にして  
+         → [MySQL:ユーザーに権限を設定する(GRANT 文)](https://www.dbonline.jp/mysql/user/index6.html)
+      1. 権限設定を反映させるコマンドを実行
+         ```console
+         mysql> flush privileges;
+         ```
+      1. wordpress_user が登録されたかの確認
+         ```console
+         mysql> SELECT user, host FROM mysql.user;
+         ```
+         wordpress_user の host が%となっていれば、全てのホストから接続可能になっていることになる。
+      1. DB サーバーが起動したタイミングで MySQL も起動するように設定しておく
+
+         ```console
+         mysql> exit
+         $ sudo systemctl enable  mysqld
+         $ sudo systemct is-enabled mysqld
+
+            # enabled ってなってたら設定できてる
+         ```
+
+         ※ `systemctl`のコマンドはこの辺を参考に  
+         → [systemctl コマンド](https://qiita.com/sinsengumi/items/24d726ec6c761fc75cc9)
+
+1. Web サーバーに WordPress をインストールする
+
+1. WordPress の初期設定をして、1.のデータベースを使うように構成する
 
 ## 8. TCP / IP による通信の仕組みを理解する
