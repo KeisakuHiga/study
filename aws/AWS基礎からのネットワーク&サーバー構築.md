@@ -451,8 +451,10 @@
       接続できたら、初期パスワードを変更しとく
 
       ```console
-         mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY '大文字、小文字、特殊文字(アスタリスク等)を含む新しいrootユーザのパスワード';
+         mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '大文字、小文字、特殊文字(アスタリスク等)を含む新しいrootユーザのパスワード';
       ```
+
+      ※ 認証プラグインを `mysql_native_password` にしておかないと死ぬ。デフォルトは `caching_sha2_password` なんだけど、PHP がこのデフォルトの認証プラグインに対応していないから、一生認証で失敗する。（PHP 7.3 以上なら問題なかったようだ。後述 2-(i)では PHP8.0 をインストールするように記述した。）
 
       じゃないと怒られる
 
@@ -506,6 +508,94 @@
 
 1. Web サーバーに WordPress をインストールする
 
+   1. PHP とそのライブラリをインストール
+      ```console
+      $ sudo amazon-linux-extras install -y php8.0
+      $ sudo yum -y install php php-mysql php-mbstring
+      ```
+   1. MySQL コマンドをインストール
+      ```console
+      $ sudo yum localinstall https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+      $ sudo yum install --enablerepo=mysql80-community mysql-community-server
+      ```
+   1. MySQL に接続
+
+      ```console
+      $ mysql -h 10.0.2.10 -u wordpress_user -p
+         [パスワード聞かれるので入力する]
+
+         # 接続確認したら、まずはOK
+      mysql> exit
+      ```
+
+   1. WordPress のダウンロード
+      ```console
+      $ cd ~
+      $ wget https://ja.wordpress.org/latest-ja.tar.gz
+      ```
+   1. WordPress の展開とインストール
+      ```console
+      $ tar xzvf latest-ja.tar.gz
+      $ cd wordpress
+      $ sudo cp -r * /var/www/html # Webサーバーソフトである Apache から WP プログラム一式が見えるようにコピーする
+      $ sudo chown apache:apache /var/www/html -R # ファイルの所有者/グループを、apache / apache に変更する
+      ```
+      ※ Linux コマンド`tar`については以下を参照する  
+      → [tar コマンドについて詳しくまとめました 【Linux コマンド集】](https://eng-entrance.com/linux-command-tar)
+
 1. WordPress の初期設定をして、1.のデータベースを使うように構成する
+
+   1. Apach の起動 （既に起動している場合、インストールした PHP を有効化させるために再起動）
+      ```console
+      $ sudo service httpd start (restart)
+      ```
+   1. WordPress 初期設定
+
+      1. `/var/www/html/wp-config-sample.php`をコピーして`/var/www/html/wp-config.php`を作る
+      1. データベースと秘密鍵の設定
+
+         ```php
+         // ** MySQL 設定 - この情報はホスティング先から入手してください。 ** //
+         /** WordPress のためのデータベース名 */
+         define( 'DB_NAME', 'ここにデータベース名' );
+
+         /** MySQL データベースのユーザー名 */
+         define( 'DB_USER', 'ここに作成したユーザー名' );
+
+         /** MySQL データベースのパスワード */
+         define( 'DB_PASSWORD', 'ここに作成したユーザーのパスワード' );
+
+         /** MySQL のホスト名 */
+         define( 'DB_HOST', '10.0.2.10' );
+
+         /** データベースのテーブルを作成する際のデータベースの文字セット */
+         define( 'DB_CHARSET', 'utf8' );
+
+         /** データベースの照合順序 (ほとんどの場合変更する必要はありません) */
+         define( 'DB_COLLATE', '' );
+
+         /**#@+
+         * 認証用ユニークキー
+         *
+         * それぞれを異なるユニーク (一意) な文字列に変更してください。
+         * {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org の秘密鍵サービス} で自動生成することもできます。
+         * 後でいつでも変更して、既存のすべての cookie を無効にできます。これにより、すべてのユーザーを強制的に再ログインさせることになります。
+         *
+         * @since 2.6.0
+         */
+
+         # 以下は、https://api.wordpress.org/secret-key/1.1/salt/　からコピペ！！！
+         define('AUTH_KEY',         'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         define('SECURE_AUTH_KEY',  'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         define('LOGGED_IN_KEY',    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         define('NONCE_KEY',        'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         define('AUTH_SALT',        'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         define('SECURE_AUTH_SALT', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         define('LOGGED_IN_SALT',   'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         define('NONCE_SALT',       'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+         /**#@-*/
+         ```
+
+   1. ブラウザから`http://<WebサーバーのパブリックIPアドレス>`に接続するとウェルカムページが表示されるはず！
 
 ## 8. TCP / IP による通信の仕組みを理解する
