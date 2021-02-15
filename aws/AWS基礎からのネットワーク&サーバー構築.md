@@ -1,11 +1,7 @@
 # AWS 基礎からのネットワーク&サーバー構築
 
 ## 0. 完成形はこんなネットワーク構成
-
-![](image/network-diagram.dio.svg)
-
-![](network-diagram.dio.svg)
-
+![](image/AWS基礎からのネットワーク&サーバー構築.drawio.png)
 ## 1. ネットワークを構築する / 実験用の VPC を作成する
 
 1. IP アドレス
