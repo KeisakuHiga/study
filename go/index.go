@@ -6,8 +6,14 @@ import (
 	"math/rand"
 )
 
-func add(x int, y int) int {
+func add1(x int, y int) int {
 	return x + y
+}
+func add2(x, y int) int {
+	return x + y
+}
+func swap(x, y string)(string, string) {
+	return y, x
 }
 func main() {
 	var title string = "packages"
@@ -26,18 +32,19 @@ func main() {
 	fmt.Println(math.Pi)  // OK
 	title = "functions"
 	fmt.Println("---------------------", title, "---------------------")
-	fmt.Println("The result of add(1, 2) is ", add(1, 2))
-	title = ""
+	fmt.Println("The result of add(1, 2) is ", add1(1, 2))
+	title = "Functions continued"
 	fmt.Println("---------------------", title, "---------------------")
+	fmt.Println("The result of add(1, 2) is ", add2(1, 2))
 
-
-	title = ""
+	title = "Multiple results"
 	fmt.Println("---------------------", title, "---------------------")
+	a, b := swap("hello", "world")
+	fmt.Println(a, b)
 
-
-	title = ""
+	title = "Named return values"
 	fmt.Println("---------------------", title, "---------------------")
-
+	
 
 	title = ""
 	fmt.Println("---------------------", title, "---------------------")
