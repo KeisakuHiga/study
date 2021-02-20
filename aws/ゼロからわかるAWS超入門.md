@@ -183,9 +183,40 @@ AWS は使った分だけ課金されるシステムだから、EC2 などの AW
 まだ公開ようのファイルをアップロードしていないから404 NotFound画面に遷移するはず。
 
    1. `index.html`を適当に作成する
+        ```html
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>ゼロからわかるAWS超入門</title>
+        </head>
+        <body>
+            <h1>Welcome S3 Bucket!!!</h1>
+        </body>
+        </html>
+        ```
    1. アップロード画面から`index.html`をアップロードする
    1. アップロードが完了したら、もう一度ブラウザから確認してみる
-   1. やったね！
+   1. `index.html`を編集して、`index.html`と`a.jpg`をアップロードしよう
+        ```html
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>ゼロからわかるAWS超入門</title>
+        </head>
+        <body>
+            <h1>Welcome S3 Bucket!!!</h1>
+            <img src="a.jpg">
+        </body>
+        </html>
+        ```
+   1. アップロードが完了したら、もう一度ブラウザから確認してみる
+
 
 ### S3 の管理操作できるポリシー
 
