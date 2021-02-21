@@ -14,12 +14,14 @@ var (
 	MaxInt          uint64     = 1<<64 - 1
 	z               complex128 = cmplx.Sqrt(-5 + 12i)
 )
+
 const (
-		Pi = 3.14
-		Big = 1 << 100
-		Small = Big >> 99
-	)
-func needInt(x int) int { return x*10 + 1}
+	Pi    = 3.14
+	Big   = 1 << 100
+	Small = Big >> 99
+)
+
+func needInt(x int) int           { return x*10 + 1 }
 func needFloat(x float64) float64 { return x * 0.1 }
 func add1(x int, y int) int {
 	return x + y
@@ -36,7 +38,20 @@ func split(sum int) (x, y int) {
 	return
 }
 func main() {
-	var title string = "packages"
+
+	var title string
+	title = ""
+	fmt.Println("---------------------", title, "---------------------")
+
+	title = "For"
+	fmt.Println("---------------------", title, "---------------------")
+	sum := 0
+	for i := 0; i < 10; i++ {
+		sum += i
+		fmt.Printf("i: %v → sum: %v\n", i, sum)
+	}
+
+	title = "packages"
 	fmt.Println("---------------------", title, "---------------------")
 
 	fmt.Println("My favorite number is", rand.Intn(10))
@@ -116,7 +131,7 @@ func main() {
 	title = "Type conversions"
 	fmt.Println("---------------------", title, "---------------------")
 	x2, y2 := 3, 4
-	fmt.Printf("Type of x2:%T, Type of y2:%T\n",x2, y2)
+	fmt.Printf("Type of x2:%T, Type of y2:%T\n", x2, y2)
 	f2 := math.Sqrt(float64(x2*x2 + y2*y2))
 	fmt.Printf("Type of f2: %T\n", f2)
 	z2 := uint(f2)
@@ -136,7 +151,7 @@ func main() {
 
 	const Truth = true
 	fmt.Println("Go rules?", Truth)
-	
+
 	title = "Numeric Constants"
 	fmt.Println("---------------------", title, "---------------------")
 	// 	const (
@@ -148,12 +163,4 @@ func main() {
 	fmt.Println(needInt(Small))
 	fmt.Println(needFloat(Small))
 	fmt.Println(needFloat(Big))
-
-
-	title = ""
-	fmt.Println("---------------------", title, "---------------------")
-
-	title = ""
-	fmt.Println("---------------------", title, "---------------------")
-
 }
