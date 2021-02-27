@@ -505,7 +505,7 @@
          ```console
          mysql> exit
          $ sudo systemctl enable  mysqld
-         $ sudo systemct is-enabled mysqld
+         $ sudo systemctl is-enabled mysqld
 
             # enabled ってなってたら設定できてる
          ```
