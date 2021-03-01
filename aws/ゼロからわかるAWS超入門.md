@@ -384,14 +384,17 @@ EBS の公式 Doc は[ここ ](https://aws.amazon.com/jp/ebs/?ebs-whats-new.sor
    これで DB インスタンスの構成は完了！
 
 ### WPのデータベースをDBインスタンスに変更する
-1. エンドポイントを確認する
+1. エンドポイントを確認する(これがその時確認したエンドポイント ↓↓↓ )　　
    rdswordpressdb.cflvseztozmj.ap-northeast-1.rds.amazonaws.com
 1. MariaDBからDBインスタンスに移行する
    1. EC2インスタンスでバックアップをとる
       ```console
       $ mysqldump --databases wordpressdb -u root -p > /tmp/wordpressdb.sql
       ```
-   1. 
+   1. RDSのDBインスタンスにリストアする
+      ```console
+      $ mysql　-h rdswordpressdb.cflvseztozmj.ap-northeast-1.rds.amazonaws.com -u root -p < /tmp/wordpressdb.sql
+      ```
    1. 
 
 ## 5. ドメインを取得する！Route53
