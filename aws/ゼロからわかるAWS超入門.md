@@ -395,8 +395,27 @@ EBS の公式 Doc は[ここ ](https://aws.amazon.com/jp/ebs/?ebs-whats-new.sor
       ```console
       $ mysql　-h rdswordpressdb.cflvseztozmj.ap-northeast-1.rds.amazonaws.com -u root -p < /tmp/wordpressdb.sql
       ```
-   1. 
+   1. wordpressのDB設定を修正する  
+      ec2インスタンスにアクセスして、/var/www/html/wo-config.php の データベース設定を修正する。
 
+      |対象|値|
+      |---|---|
+      |DB_NAME|'wordpressdb'|
+      |DB_USER|'root'|
+      |DB_PASSWORD|'myrdspassword'|
+      |DB_HOST|'確認したRDSインスタンスのエンドポイント'|
+
+   1. Apachの再起動  
+      ```console
+      $ sudo systemctl restart httpd
+      ```
+   1. WordPressの動作確認  
+   EC2インスタンスのIPをブラウザからHTTPで叩いて動作確認する。 
+
+1. バックアップ（＝スナップショット）の取り方
+   1. スナップショットメニューから「スナップショットの取得」押下
+      1. スナップショットからDBを復元することもできる！
+      
 ## 5. ドメインを取得する！Route53
 
 ## 6. 安全な通信を！Certificate Management
