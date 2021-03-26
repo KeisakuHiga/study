@@ -37,6 +37,9 @@ func split(sum int) (x, y int) {
 	y = sum - x
 	return
 }
+func one(x *int){
+	*x = 1
+}
 func main() {
 
 	var title string
@@ -155,12 +158,18 @@ func main() {
 	title = "Numeric Constants"
 	fmt.Println("---------------------", title, "---------------------")
 	// 	const (
-	// 		Big = 1 << 100
-	// 		Small = Big >> 99
-	// 	)
-	// func needInt(x int) int { return x*10 + 1}
-	// func needFloat(x float64) float64 { return x * 0.1 }
-	fmt.Println(needInt(Small))
-	fmt.Println(needFloat(Small))
-	fmt.Println(needFloat(Big))
+		// 		Big = 1 << 100
+		// 		Small = Big >> 99
+		// 	)
+		// func needInt(x int) int { return x*10 + 1}
+		// func needFloat(x float64) float64 { return x * 0.1 }
+		fmt.Println(needInt(Small))
+		fmt.Println(needFloat(Small))
+		fmt.Println(needFloat(Big))
+		
+	title = "pointer"
+	fmt.Println("---------------------", title, "---------------------")
+	var n int = 100
+	one(&n) // passing address of n, and override the value from 100 to 1
+	fmt.Println(n)
 }
