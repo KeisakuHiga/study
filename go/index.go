@@ -8,7 +8,6 @@ import (
 )
 
 var (
-	c, python, java bool
 	i, j            int        = 1, 2
 	ToBe            bool       = false
 	MaxInt          uint64     = 1<<64 - 1
@@ -23,114 +22,35 @@ const (
 
 func needInt(x int) int           { return x*10 + 1 }
 func needFloat(x float64) float64 { return x * 0.1 }
-func add1(x int, y int) int {
-	return x + y
-}
-func add2(x, y int) int {
-	return x + y
-}
-func swap(x, y string) (string, string) {
-	return y, x
-}
-func split(sum int) (x, y int) {
-	x = sum * 4 / 9
-	y = sum - x
-	return
-}
 func one(x *int){
 	*x = 1
 }
 func main() {
-
-	var title string
-	title = ""
-	fmt.Println("---------------------", title, "---------------------")
-
-	title = "For"
-	fmt.Println("---------------------", title, "---------------------")
-	sum := 0
-	for i := 0; i < 10; i++ {
-		sum += i
-		fmt.Printf("i: %v → sum: %v\n", i, sum)
-	}
-
-	title = "packages"
-	fmt.Println("---------------------", title, "---------------------")
-
-	fmt.Println("My favorite number is", rand.Intn(10))
-
-	title = "imports"
-	fmt.Println("---------------------", title, "---------------------")
-	fmt.Printf("Now you have %g problems. \n", math.Sqrt(7))
-
-	title = "exported-names"
-	fmt.Println("---------------------", title, "---------------------")
-	// fmt.Println(math.pi)  // NG
-	fmt.Println(math.Pi) // OK
-	title = "functions"
-	fmt.Println("---------------------", title, "---------------------")
-	fmt.Println("The result of add(1, 2) is ", add1(1, 2))
-	title = "Functions continued"
-	fmt.Println("---------------------", title, "---------------------")
-	fmt.Println("The result of add(1, 2) is ", add2(1, 2))
-
-	title = "Multiple results"
-	fmt.Println("---------------------", title, "---------------------")
+	forLoop()
+	packages()
+	imports()
+	exportedNames()
+	fmt.Println("The result of add1(1, 2) is ", add1(1, 2))
+	fmt.Println("The result of add2(2, 3) is ", add2(2, 3))
 	a, b := swap("hello", "world")
-	fmt.Println(a, b)
-
-	title = "Named return values"
-	fmt.Println("---------------------", title, "---------------------")
+	fmt.Println("The result of a, b := swap('hello', 'world') -> ", a, b)
 	/*
-		func split(sum int) (x, y int) {
-			x = sum *  4 / 9
-			y = sum - x
-			return // this is called 'naked return' dangerous!
-		}
+	func split(sum int) (x, y int) {
+		x = sum *  4 / 9
+		y = sum - x
+		return // this is called 'naked return' dangerous!
+	}
 	*/
-	fmt.Println(split(17))
-
-	title = "Variables"
-	fmt.Println("---------------------", title, "---------------------")
-	// var c, python, java bool // declared at the top of this code
-	var i int
-	fmt.Println(i, c, python, java)
-
-	title = "Variables with initializers"
-	fmt.Println("---------------------", title, "---------------------")
-	// var i, j int = 1, 2 // declred at the top of this code
-	var c, python, java = true, false, "no!"
-	fmt.Println(i, j, c, python, java)
-
-	title = "Short variable declarations"
-	fmt.Println("---------------------", title, "---------------------")
-	k := 3
-	javascript, solidity, golang := true, false, "no!"
-	fmt.Println(k, javascript, solidity, golang)
-
-	title = "Basic types"
-	fmt.Println("---------------------", title, "---------------------")
-	// var (
-	// 	ToBe            bool       = false
-	// 	MaxInt          uint64     = 1<<64 - 1
-	// 	z               complex128 = cmplx.Sqrt(-5 + 12i)
-	// )
-	fmt.Printf("Type: %T Value: %v\n", ToBe, ToBe)
-	fmt.Printf("Type: %T Value: %v\n", MaxInt, MaxInt)
-	fmt.Printf("Type: %T Value: %v\n", z, z)
-	var x uint64 = 1
-	fmt.Println(x<<64 - 1)
-
-	title = "Zero values"
-	fmt.Println("---------------------", title, "---------------------")
-	var (
-		i2 int
-		f  float64
-		b2 bool
-		s  string
-	)
-	fmt.Println("%v %v %v %q", i2, f, b2, s)
-
+	d, e := split(9)
+	fmt.Println("The result[0] of split(9) is ", d)
+	fmt.Println("The result[1] of split(9) is ", e)
+	variables()
+	variablesWithInitializers()
+	shortVariableDeclarations()
+	basicTypes()
+	zeroValues()
+	
+	var title string
 	title = "Type conversions"
 	fmt.Println("---------------------", title, "---------------------")
 	x2, y2 := 3, 4
@@ -172,4 +92,113 @@ func main() {
 	var n int = 100
 	one(&n) // passing address of n, and override the value from 100 to 1
 	fmt.Println(n)
+}
+
+func forLoop() {
+	var title string = "for"
+	fmt.Println("---------------------", title, "---------------------")
+	sum := 0
+	for i := 0; i < 10; i++ {
+		sum += i
+		fmt.Printf("i: %v -> sum: %v\n", i, sum)
+	}
+}
+
+func packages() {
+	var title string = "packages"
+	fmt.Println("---------------------", title, "---------------------")
+	fmt.Println("My favorite number is", rand.Intn(10))
+}
+
+func imports() {
+	var title string
+	title = "imports"
+	fmt.Println("---------------------", title, "---------------------")
+	fmt.Printf("Now you have %g problems. \n", math.Sqrt(7))
+	fmt.Printf("Now you have %g problems. \n", math.Sqrt(4))
+}
+
+func exportedNames() {
+	title := "exported-names"
+	fmt.Println("---------------------", title, "---------------------")
+	// fmt.Println(math.pi)  // NG
+	fmt.Println(math.Pi) // OK
+}
+
+func add1(x int, y int) int {
+	title := "function add1"
+	fmt.Println("---------------------", title, "---------------------")
+	return x + y
+}
+
+func add2(x, y int) int {
+	title := "function add2"
+	fmt.Println("---------------------", title, "---------------------")
+	return x + y
+}
+
+func swap(x, y string) (string, string) {
+	title := "Multiple results"
+	fmt.Println("---------------------", title, "---------------------")
+	return y, x
+}
+
+func split(sum int) (x, y int) {
+	title := "Named return values"
+	fmt.Println("---------------------", title, "---------------------")
+	x = sum * 4 / 9
+	y = sum - x
+	return // this is called 'naked return', and this is basically dangerous!
+}
+
+func variables() {
+	title := "variables"
+	fmt.Println("---------------------", title, "---------------------")
+	var (
+		c, python, java bool
+		i 							int
+	)
+	fmt.Println("default values")
+	fmt.Println(i, c, python, java)
+}
+
+func variablesWithInitializers() {
+	title := "variables with initializers"
+	fmt.Println("---------------------", title, "---------------------")
+	var c, python, java = true, false, "no!"
+	var i, j int = 10, 20
+	fmt.Println("c: ", c, "\npython: ", python, "\njava: ", java, "\ni: ", i, "\nj: ", j)
+}
+
+func shortVariableDeclarations() {
+	title := "Short variable declarations"
+	fmt.Println("---------------------", title, "---------------------")
+	k := 32
+	js, solidity, golang := true, false, "go!"
+	fmt.Println("k: ", k, "\njs: ", js, "\nsolidity: ", solidity, "\ngolang: ", golang)
+}
+
+func basicTypes() {
+	title := "basic types"
+	fmt.Println("---------------------", title, "---------------------")
+	var (
+		ToBe 		bool				= false
+		MaxInt	uint64			= 1<<64 -1
+		z				complex128	= cmplx.Sqrt(-5 + 12i)
+	)
+	fmt.Printf("ToBe -> Type: %T Value: %v\n", ToBe, ToBe)
+	fmt.Printf("MaxInt -> Type: %T Value: %v\n", MaxInt, MaxInt)
+	fmt.Printf("z -> Type: %T Value: %v\n", z, z)
+}
+
+func zeroValues() {
+	title := "zero values"
+	fmt.Println("---------------------", title, "---------------------")
+	var (
+		i int
+		f float64
+		b bool
+		s string
+	)
+	fmt.Printf("zero values of \nint: %v, \nfloat64: %v, \nbool: %v, \nstring: %v\n", i, f, b, s)
 }
