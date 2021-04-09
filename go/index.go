@@ -5,6 +5,7 @@ import (
 	"math"
 	"math/cmplx"
 	"math/rand"
+	"runtime"
 )
 
 func main() {
@@ -35,6 +36,23 @@ func main() {
 	ifFunc()
 	ifWithShortStatement()
 	ifAndElse()
+	switchFunc()
+}
+
+func switchFunc() {
+	title := "switch"
+	fmt.Println("---", title, "---")
+	fmt.Print("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux.")
+	default:
+		// feedsb, opendsb,
+		// plan9, windows...
+		fmt.Printf("%s.\n", os)
+	}
 }
 
 func ifAndElse() {
@@ -43,9 +61,7 @@ func ifAndElse() {
 	fmt.Println(
 		pow2(3, 2, 10),
 		pow2(3, 3, 20),
-
 	)
-	
 }
 func pow2(x, n, lim float64) float64 {
 	if v := math.Pow(x, n); v < lim {
