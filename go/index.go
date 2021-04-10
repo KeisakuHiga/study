@@ -6,8 +6,11 @@ import (
 	"math/cmplx"
 	"math/rand"
 	"runtime"
+	"time"
 )
-
+func init() {
+	fmt.Println("Hello Go World!")
+}
 func main() {
 	packages()
 	imports()
@@ -37,13 +40,35 @@ func main() {
 	ifWithShortStatement()
 	ifAndElse()
 	switchFunc()
+	switchEvaluationOrder()
 }
 
+func switchEvaluationOrder() {
+	title := "switchEvaluationOrder"
+	fmt.Println("---", title, "---")
+	fmt.Println("When's Saturday?")
+	now := time.Now()
+	fmt.Println("now: ", now)
+	today := time.Now().Weekday()
+	fmt.Println("today: ", today)
+	switch time.Saturday {
+	case today + 0:
+		fmt.Println("Today")
+	case today + 1:
+		fmt.Println("Tomorrow")
+	case today + 2:
+		fmt.Println("In 2 days")
+	default:
+		fmt.Println("Too far away...")
+	}
+}
 func switchFunc() {
 	title := "switch"
 	fmt.Println("---", title, "---")
-	fmt.Print("Go runs on ")
-	switch os := runtime.GOOS; os {
+	// fmt.Print("Go runs on ")
+	os := runtime.GOOS;
+	fmt.Println("os; ", os)
+	switch os {
 	case "darwin":
 		fmt.Println("OS X.")
 	case "linux":
