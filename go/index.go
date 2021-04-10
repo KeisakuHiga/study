@@ -43,8 +43,19 @@ func main() {
 	switchEvaluationOrder()
 	switchWithoutCondition()
 	deferFunc()
+	deferMult()
 }
 
+func deferMult() {
+	title := "deferMult"
+	fmt.Println("---", title, "---")
+	fmt.Println("counting")
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+
+	}
+	fmt.Println("done")
+}
 func deferFunc() {
 	title := "deferFunc"
 	fmt.Println("---", title, "---")
