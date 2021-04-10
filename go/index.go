@@ -42,8 +42,21 @@ func main() {
 	switchFunc()
 	switchEvaluationOrder()
 	switchWithoutCondition()
+	deferFunc()
 }
 
+func deferFunc() {
+	title := "deferFunc"
+	fmt.Println("---", title, "---")
+	defer fmt.Print(" later.")
+	defer fmt.Print("postponed something")
+	defer fmt.Print(" that being ")
+	defer fmt.Print("Defer means")
+	defer fmt.Println("!!")
+	defer fmt.Print("World ")
+
+	fmt.Print("Hello ")
+}
 func switchWithoutCondition() {
 	title := "switchWithoutCondition"
 	fmt.Println("---", title, "---")
