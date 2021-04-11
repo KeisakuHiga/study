@@ -374,7 +374,7 @@
    1. この ICMP が通るように「DB-SG」の設定を編集（「全ての ICMP」を許可するように設定）する。
    1. Web サーバーに接続
       ```console
-      $ ssh -i my-key ec2-user@<WebサーバーのパブリックIP>
+      $ ssh -i my-key.pem ec2-user@<WebサーバーのパブリックIP>
       ```
    1. 接続後、DB サーバーに疎通確認！
       ```console
