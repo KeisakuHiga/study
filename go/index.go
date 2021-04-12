@@ -46,8 +46,22 @@ func main() {
 	pointer()
 	pointer2()
 	structs()
+	structsFields()
 }
 
+func structsFields() {
+	title := "structsFields"
+	fmt.Println("---", title, "---")
+	type Vertex struct {
+		X int
+		Y int
+	}
+	v := Vertex{1, 2}
+	fmt.Println("v.X: ", v.X)
+	v.X = 4
+	fmt.Println("v.X: ", v.X)
+	fmt.Println("v.Y: ", v.Y)
+}
 func structs() {
 	title := "structs"
 	fmt.Println("---", title, "---")
