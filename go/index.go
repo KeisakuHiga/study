@@ -31,7 +31,6 @@ func main() {
 	typeInference()
 	constants()
 	numericConstants()
-	pointer()
 	forLoop()
 	forContinued()
 	while()
@@ -44,8 +43,38 @@ func main() {
 	switchWithoutCondition()
 	deferFunc()
 	deferMult()
+	pointer()
+	pointer2()
+	structs()
 }
 
+func structs() {
+	title := "structs"
+	fmt.Println("---", title, "---")
+	type Vertex struct {
+		X int
+		Y int
+	}
+	fmt.Println(Vertex{1, 2})
+}
+func pointer2() {
+	title := "pointer2"
+	fmt.Println("---", title, "---")
+	i, j := 42, 2701
+
+	iAddr := &i												// point to i
+	fmt.Println("iAddr: ", iAddr)			// see the address of i
+	fmt.Println("*iAddr: ", *iAddr)		// read i through the pointer
+	*iAddr = 21												// set i through the pointer
+	fmt.Println("*iAddr: ", *iAddr)		// read i through the pointer
+	fmt.Println("i: ", i)							// see the new value of i
+
+	jAddr := &j												// point to j
+	fmt.Println("j: ", j)
+	fmt.Println("jAddr: ", jAddr)
+	*jAddr = *jAddr / 37							// divide j through the pointer
+	fmt.Println(j)										// see the new value of j
+}
 func deferMult() {
 	title := "deferMult"
 	fmt.Println("---", title, "---")
