@@ -47,8 +47,27 @@ func main() {
 	pointer2()
 	structs()
 	structsFields()
+	structsPointers()
 }
 
+func structsPointers() {
+	title := "structsPointers"
+	fmt.Println("---", title, "---")
+	type Vertex struct {
+		X int
+		Y int
+	}
+	v := Vertex{1, 2}
+	fmt.Println(v)
+	p := &v
+	/*
+	1e□□という数値の意味
+	大きい数字は 1e3 のように e を使って表すことがあります。e は 10 のべき乗を表します。
+	例えば、1e3 は 10^3=1000 を表します。1e9=1000000000
+	*/
+	p.X = 1e9
+	fmt.Println(v)
+}
 func structsFields() {
 	title := "structsFields"
 	fmt.Println("---", title, "---")
