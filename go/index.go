@@ -50,9 +50,47 @@ func main() {
 	structsPointers()
 	structsLiterals()
 	arrayFunc()
+	slices()
+	slicesPointers()
 }
 
-func arrayFunc() {
+func slicesPointers() {
+	title := "slicesPointers"
+	fmt.Println("---", title, "---")
+	fmt.Println(`A slice does not store any data, it just describes a section of an underlying array.`)
+	names := [4]string{
+		"John",
+		"Paul",
+		"George",
+		"Ringo",
+	}
+	fmt.Println(names)
+
+	a := names[0:2]		// john, paul
+	b := names[1:3]		// paul, george
+	fmt.Println(a, b)
+
+	b[0] = "XXX"
+	fmt.Println(a, b)	// [John Paul] [XXX George]
+	fmt.Println(names)// [John Paul George Ringo]
+}
+func slices() {
+	title := "slices"
+	fmt.Println("---", title, "---")
+	fmt.Println(`An array has a fixed size.
+	A slice, on the other hand, is a dynamically-sized, flexible view into the elements of an array.
+	In practice, slices are much more common than arrays.`)
+	primes := [6]int{2, 3, 5, 7, 11, 13}
+
+	var s []int = primes[1:4] // is slicing [3, 5, 7]
+	fmt.Println(s)
+
+	oneToFive := []int{1, 2, 3, 4, 5}
+	fmt.Println(oneToFive)
+	fmt.Println(oneToFive[2:3])	
+	fmt.Println(oneToFive[2:3][0])	
+}
+	func arrayFunc() {
 	title := "arrayFunc"
 	fmt.Println("---", title, "---")
 	fmt.Println("An array's length is part of its type, so arrays cannot be resized.")
