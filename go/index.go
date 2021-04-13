@@ -53,8 +53,43 @@ func main() {
 	slices()
 	slicesPointers()
 	sliceLiterals()
+	sliceBounds()
+	sliceLenCap()
 }
 
+func sliceLenCap() {
+	title := "sliceLenCap"
+	fmt.Println("---", title, "---")
+	s := []int{2, 3, 5, 7, 11, 13}
+	printSlice(s)
+
+	fmt.Println("Slice the slice to give it zero length")
+	s = s[:0]
+	printSlice(s)
+
+	fmt.Println("Extend its length")
+	s = s[:4]
+	printSlice(s)
+	
+	fmt.Println("Drop its first two values")
+	s = s[2:]
+	printSlice(s)
+}
+func printSlice(s []int) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
+}
+
+func sliceBounds() {
+	title := "sliceBounds"
+	fmt.Println("---", title, "---")
+	s := []int{2, 3, 5, 7, 11, 13}
+	s =  s[1:4]
+	fmt.Println(s) // 3, 5, 7
+	s = s[:2]
+	fmt.Println(s) // 3, 5
+	s = s[1:]
+	fmt.Println(s) // 5
+}
 func sliceLiterals() {
 	title := "sliceLiterals"
 	fmt.Println("---", title, "---")
