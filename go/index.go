@@ -49,8 +49,22 @@ func main() {
 	structsFields()
 	structsPointers()
 	structsLiterals()
+	arrayFunc()
 }
 
+func arrayFunc() {
+	title := "arrayFunc"
+	fmt.Println("---", title, "---")
+	fmt.Println("An array's length is part of its type, so arrays cannot be resized.")
+	var a [2]string
+	a[0] = "Hello"
+	a[1] = "World"
+	fmt.Println("a[0]: ", a[0])
+	fmt.Println("a[1]: ", a[1])
+	fmt.Println("a: ", a)
+	primes := [6]int{2, 3, 5, 7, 11, 13}
+	fmt.Println("primes: ", primes)
+}
 func structsLiterals() {
 	title := "structsLiterals"
 	fmt.Println("---", title, "---")
@@ -67,6 +81,8 @@ func structsLiterals() {
 	fmt.Println("v2: ", v2)
 	fmt.Println("v3: ", v3)
 	fmt.Println("p: ", p)
+	p.X = 1e3
+	fmt.Println("p.X: ", p.X)
 }
 func structsPointers() {
 	title := "structsPointers"
