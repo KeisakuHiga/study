@@ -55,6 +55,17 @@ func main() {
 	sliceLiterals()
 	sliceBounds()
 	sliceLenCap()
+	nilSlices()
+}
+
+func nilSlices() {
+	title := "nilSlices"
+	fmt.Println("---", title, "---")
+	var s []int
+	fmt.Println(s, len(s), cap(s))
+	if s == nil {
+		fmt.Println("nil!")
+	}
 }
 
 func sliceLenCap() {
