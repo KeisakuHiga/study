@@ -64,6 +64,45 @@ func main() {
 	strconvFunc()
 	rangeFunc()
 	rangeFunc2()
+	mapsFunc()
+	mapLiterals()
+}
+
+func mapLiterals() {
+	title := "map literals"
+	fmt.Println("---", title, "---")
+	type Vertex struct {
+		Lat, Long float64
+	}
+	var m = map[string]Vertex{
+		"Bell Labs": Vertex{
+			40.68433, -74.39967,
+		},
+		"Google": Vertex{
+			37.42202, -122.08408,
+		},
+	}
+	fmt.Println(m)
+}
+
+func mapsFunc() {
+	title := "maps"
+	fmt.Println("---", title, "---")
+	type Vertex struct {
+		Lat, Long float64
+	}
+	var m map[string]Vertex
+	fmt.Println("The zero value of a map is nil. A nil map has no keys, nor can keys be added.")
+	fmt.Println(m)
+	
+	m = make(map[string]Vertex)
+	fmt.Println("The make function returns a map of the given type, initialized and ready for use.")
+	fmt.Println(m)
+	m["Bell Labs"] = Vertex{
+		40.68433, -74.39967,
+	}
+	fmt.Println(m)
+	fmt.Println(m["Bell Labs"])
 }
 
 func rangeFunc2() {
