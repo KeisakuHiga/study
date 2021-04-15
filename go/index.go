@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"time"
 	"strings"
+	"strconv"
 )
 func init() {
 	fmt.Println("Hello Go World!")
@@ -60,6 +61,25 @@ func main() {
 	makingSlices()
 	slicesOfSlice()
 	appendFunc()
+	strconvFunc()
+	rangeFunc()
+}
+
+func rangeFunc() {
+	title := "range"
+	fmt.Println("---", title, "---")
+	var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+	for i, v := range pow {
+		fmt.Printf("2**%d = %d\n", i, v)
+	}
+}
+
+func strconvFunc() {
+	title := "strconvFunc"
+	fmt.Println("---", title, "---")
+	// https://golang.org/pkg/strconv/
+	i, _ := strconv.Atoi("14")
+	fmt.Println(i)
 }
 
 func appendFunc() {
@@ -380,8 +400,6 @@ func switchFunc() {
 	case "linux":
 		fmt.Println("Linux.")
 	default:
-		// feedsb, opendsb,
-		// plan9, windows...
 		fmt.Printf("%s.\n", os)
 	}
 }
