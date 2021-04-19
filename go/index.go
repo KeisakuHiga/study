@@ -70,6 +70,15 @@ func main() {
 	functionValues()
 	functionClosures()
 	makeSlices2()
+	byteFunc()
+}
+
+func byteFunc() {
+	title := "byte"
+	fmt.Println("---", title, "---")
+	b := []byte{72, 73}
+	fmt.Println(b)
+	fmt.Println(string(b))
 }
 
 func makeSlices2() {
