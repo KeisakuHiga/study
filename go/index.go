@@ -79,6 +79,10 @@ func byteFunc() {
 	b := []byte{72, 73}
 	fmt.Println(b)
 	fmt.Println(string(b))
+	
+	c := []byte("hi")
+	fmt.Println(c)
+	fmt.Println(string(c))
 }
 
 func makeSlices2() {
