@@ -71,6 +71,20 @@ func main() {
 	functionClosures()
 	makeSlices2()
 	byteFunc()
+	variadicArgument()
+	variadicArgument(10, 20, 30)
+	variadicArgument(10, 20, 30, 40)
+	s := []int{1, 2, 3}
+	variadicArgument(s...)
+}
+
+func variadicArgument(params ...int) {
+	title := "variadic argument"
+	fmt.Println("---", title, "---")
+	fmt.Println(len(params), params)
+	for _, param := range params{
+		fmt.Println(param)
+	}
 }
 
 func byteFunc() {
