@@ -76,6 +76,18 @@ func main() {
 	variadicArgument(10, 20, 30, 40)
 	s := []int{1, 2, 3}
 	variadicArgument(s...)
+	practice1()
+}
+
+func practice1() {
+	title := "practice1"
+	fmt.Println("---", title, "---")
+	f := 1.11
+	fmt.Println(int(f))
+	s := []int{1, 2, 5, 6, 2, 3, 1}
+	fmt.Println(s[2:4])
+	m := map[string]int{"Mike": 20, "Nancy": 24, "Messi":30}
+	fmt.Printf("%T %v", m, m)
 }
 
 func variadicArgument(params ...int) {
