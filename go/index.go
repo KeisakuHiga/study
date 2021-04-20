@@ -9,6 +9,9 @@ import (
 	"time"
 	"strings"
 	"strconv"
+	"io"
+	"log"
+	"os"
 )
 func init() {
 	fmt.Println("Hello Go World!")
@@ -77,8 +80,32 @@ func main() {
 	s := []int{1, 2, 3}
 	variadicArgument(s...)
 	practice1()
+	LoggingSettings("test.log")
+	logging()
 }
 
+func LoggingSettings(logFile string) {
+	logfile, _ := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	multiLogFile := io.MultiWriter(os.Stdout, logfile)
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+	log.SetOutput(multiLogFile)
+}
+func logging() {
+	title := "logging"
+	fmt.Println("---", title, "---")
+	log.Println("logging!")
+	log.Printf("%T %v", "test", "test")
+
+	_, err := os.Open("fldja;")
+	if err != nil{
+		log.Fatalln("Exit", err)
+	}
+
+	log.Fatalf("%T %v", "error", "error")
+	log.Fatalln("error!")
+
+	fmt.Println("ok!")
+}
 func practice1() {
 	title := "practice1"
 	fmt.Println("---", title, "---")
@@ -87,7 +114,7 @@ func practice1() {
 	s := []int{1, 2, 5, 6, 2, 3, 1}
 	fmt.Println(s[2:4])
 	m := map[string]int{"Mike": 20, "Nancy": 24, "Messi":30}
-	fmt.Printf("%T %v", m, m)
+	fmt.Printf("%T %v\n", m, m)
 }
 
 func variadicArgument(params ...int) {
