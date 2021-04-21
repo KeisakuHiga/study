@@ -80,10 +80,25 @@ func main() {
 	s := []int{1, 2, 3}
 	variadicArgument(s...)
 	practice1()
-	LoggingSettings("test.log")
-	logging()
+	// LoggingSettings("test.log")
+	// logging()
+	errorHandling()
 }
-
+func errorHandling() {
+	title := "errorHandling"
+	fmt.Println("---", title, "---")
+	file, err := os.Open("./index.go")
+	if err != nil {
+		log.Fatalln("Error!")
+	}
+	defer file.Close()
+	data := make([]byte, 100)
+	count, err := file.Read(data)
+	if err != nil {
+		log.Fatalln("Error!")
+	}
+	fmt.Println(count, string(data))
+}
 func LoggingSettings(logFile string) {
 	logfile, _ := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	multiLogFile := io.MultiWriter(os.Stdout, logfile)
