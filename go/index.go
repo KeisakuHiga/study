@@ -84,13 +84,39 @@ func main() {
 	// logging()
 	// errorHandling()
 	panicAndRecover()
+	practice2()
+}
+func practice2() {
+	title := "practice2"
+	fmt.Println("---", title, "---")
+	fmt.Println("Find the smallest num in the next slice")
+	l := []int{100, 300, 23, 11, 23, 2, 4, 6, 4}
+	smallest := l[0]
+	for _, v := range l{
+		if smallest > v {
+			smallest = v
+		}
+	}
+	fmt.Println(smallest)
+	fmt.Println("How much is the total price?")
+	m := map[string]int{
+		"apple": 200,
+		"grapes": 150,
+    "orange": 80,
+    "papaya": 500,
+    "kiwi":   90,
+	}
+	sum := 0
+	for _, v := range m{
+		sum += v
+	}
+	fmt.Println(sum)
 }
 func panicAndRecover() {
 	title := "panicAndRecover"
 	fmt.Println("---", title, "---")
 	save()
 	fmt.Println("OK")
-	
 }
 func save() {
 	defer func() {
