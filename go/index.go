@@ -82,7 +82,25 @@ func main() {
 	practice1()
 	// LoggingSettings("test.log")
 	// logging()
-	errorHandling()
+	// errorHandling()
+	panicAndRecover()
+}
+func panicAndRecover() {
+	title := "panicAndRecover"
+	fmt.Println("---", title, "---")
+	save()
+	fmt.Println("OK")
+	
+}
+func save() {
+	defer func() {
+		s := recover()
+		fmt.Println(s)
+	}()
+	thirdPartyConnectDB()
+}
+func thirdPartyConnectDB() {
+	panic("Unable to connect database")
 }
 func errorHandling() {
 	title := "errorHandling"
@@ -98,6 +116,10 @@ func errorHandling() {
 		log.Fatalln("Error!")
 	}
 	fmt.Println(count, string(data))
+
+	if err = os.Chdir("test"); err != nil{
+		log.Fatalln("Error")
+	}
 }
 func LoggingSettings(logFile string) {
 	logfile, _ := os.OpenFile(logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
