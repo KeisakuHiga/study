@@ -86,7 +86,24 @@ func main() {
 	panicAndRecover()
 	practice2()
 	method()
+	fibonacciFunc()
 }
+func fibonacciFunc() {
+	title := "fibonacci"
+	fmt.Println("---", title, "---")
+	f := fibonacci()
+	for i:= 0; i < 10; i++ {
+		fmt.Println(f())
+	}
+}
+func fibonacci() func() int {
+	a, b := 1, 0
+	return func() int {
+		a, b = b, a+b
+		return a
+	}
+}
+
 func method() {
 	title := "method"
 	fmt.Println("---", title, "---")
