@@ -88,12 +88,24 @@ func main() {
 	method()
 	fibonacciFunc()
 	methods()
+	methodsFuncs()
+}
+func methodsFuncs() {
+	title := "methodsFuncs"
+	fmt.Println("---", title, "---")
+	v := Vertex2{3, 4}
+	fmt.Println(Abs(v))
+	fmt.Println(v)
+}
+func Abs(v Vertex2) float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 func methods() {
 	title := "methods"
 	fmt.Println("---", title, "---")
-	v := Vertex2{5, 6}
+	v := Vertex2{3, 4}
 	fmt.Println(v.Abs())
+	fmt.Println(v)
 }
 type Vertex2 struct {
 	X, Y float64
