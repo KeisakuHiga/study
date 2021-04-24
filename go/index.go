@@ -87,6 +87,19 @@ func main() {
 	practice2()
 	method()
 	fibonacciFunc()
+	methods()
+}
+func methods() {
+	title := "methods"
+	fmt.Println("---", title, "---")
+	v := Vertex2{5, 6}
+	fmt.Println(v.Abs())
+}
+type Vertex2 struct {
+	X, Y float64
+}
+func (v Vertex2) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 func fibonacciFunc() {
 	title := "fibonacci"
