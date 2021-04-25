@@ -91,6 +91,38 @@ func main() {
 	method()
 	methodNonStruct()
 	interfaceFunc()
+	typeAssertion()
+}
+func typeAssertion() {
+	title := "typeAssertion"
+	fmt.Println("---", title, "---")
+	// var i interface{} = 10
+	// fmt.Printf("%T %v\n", i, i)
+	// do(i)
+	do(10)
+	do("Mike")
+	do(true)
+
+	var i int = 10
+	ii := float64(10)
+	fmt.Println(i, ii)
+}
+func do(i interface{}) {
+	/*
+	ii := i.(int)
+	ii *= 2
+	fmt.Println(ii)
+	ss := i.(string)
+	fmt.Println(ss + "!")
+	*/
+	switch v := i.(type) {
+	case int :
+		fmt.Println(v)
+	case string:
+		fmt.Println(v + "!")
+	default:
+		fmt.Printf("I don't know %T\n", v)
+	}
 }
 func interfaceFunc() {
 	title := "interfaceFunc"
