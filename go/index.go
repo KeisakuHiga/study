@@ -85,10 +85,36 @@ func main() {
 	// errorHandling()
 	panicAndRecover()
 	practice2()
-	method()
 	fibonacciFunc()
 	methods()
 	methodsFuncs()
+	method()
+}
+func method() {
+	title := "method"
+	fmt.Println("---", title, "---")
+	// v := Vertex{3, 4}
+	// fmt.Println(Area(v))
+	v := New(3, 4)
+	v.Scale(10)
+	fmt.Println(v.Area())
+}
+// this can be called within this package only
+type Vertex struct{
+	x, y int
+}
+func (v Vertex) Area() int{
+	return v.x * v.y
+}
+func (v *Vertex) Scale(i int) {
+	v.x = v.x * i
+	v.y = v.y * i
+}
+// func Area(v Vertex) int {
+// 	return v.x * v.y
+// }
+func New(x, y int) *Vertex {
+	return &Vertex{x, y}
 }
 func methodsFuncs() {
 	title := "methodsFuncs"
@@ -129,29 +155,6 @@ func fibonacci() func() int {
 	}
 }
 
-func method() {
-	title := "method"
-	fmt.Println("---", title, "---")
-	v := Vertex{3, 4}
-	fmt.Println(Area(v))
-	v.Scale(10)
-	fmt.Println(v.Area())
-	
-}
-type Vertex struct{
-	X, Y int
-}
-func Area(v Vertex) int {
-	return v.X * v.Y
-}
-func (v Vertex) Area() int{
-	return v.X * v.Y
-}
-func (v *Vertex) Scale(i int) {
-	v.X = v.X * i
-	v.Y = v.Y * i
-
-}
 func practice2() {
 	title := "practice2"
 	fmt.Println("---", title, "---")
