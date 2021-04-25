@@ -97,6 +97,36 @@ func main() {
 	customError()
 	practice3()
 	goroutine()
+	channel()
+}
+func channel() {
+	title := "channel"
+	fmt.Println("---", title, "---")
+	s1 := []int{1,2,3,4,5}
+	s2 := []int{5,6,7,8,9}
+	c := make(chan int)
+	go goroutine2(s2, c)
+	go goroutine1(s1, c)
+	// blocking until x receives c
+	// channel data structure: que
+	x := <- c
+	fmt.Println(x)
+	y := <- c
+	fmt.Println(y)
+}
+func goroutine1(s []int, c chan int) {
+	sum := 0
+	for _, v := range s {
+		sum += v
+	}
+	c <- sum
+}
+func goroutine2(s []int, c chan int) {
+	sum := 0
+	for _, v := range s {
+		sum += v
+	}
+	c <- sum
 }
 func goroutine() {
 	title := "goroutine"
