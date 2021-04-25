@@ -93,6 +93,28 @@ func main() {
 	interfaceFunc()
 	typeAssertion()
 	stringer()
+	customError()
+}
+func customError() {
+	title := "customError"
+	fmt.Println("---", title, "---")
+	if err := myCustomError(); err != nil {
+		fmt.Println(err)
+	}
+}
+func myCustomError() error {
+	// Something wrong
+	ok := false
+	if ok {
+		return nil
+	}
+	return &UserNotFound{Username: "mike"}
+}
+type UserNotFound struct {
+	Username string
+}
+func (e *UserNotFound) Error() string {
+	return fmt.Sprintf("User not found: %v", e.Username)
 }
 func stringer() {
 	title := "stringer"
