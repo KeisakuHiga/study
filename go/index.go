@@ -89,6 +89,19 @@ func main() {
 	methods()
 	methodsFuncs()
 	method()
+	methodNonStruct()
+}
+func methodNonStruct() {
+	title := "methodNonStruct"
+	fmt.Println("---", title, "---")
+	myInt := MyInt(10)
+	fmt.Println(myInt.Double())
+}
+type MyInt int
+func (i MyInt) Double() int {
+	fmt.Printf("%T %v\n", i, i)
+	fmt.Printf("%T %v\n", 1, 1)
+	return int(i * 2)
 }
 func method() {
 	title := "method"
