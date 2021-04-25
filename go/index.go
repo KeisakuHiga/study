@@ -92,6 +92,21 @@ func main() {
 	methodNonStruct()
 	interfaceFunc()
 	typeAssertion()
+	stringer()
+}
+func stringer() {
+	title := "stringer"
+	fmt.Println("---", title, "---")
+	mike := Person2{"Mike", 39}
+	fmt.Println(mike)
+}
+type Person2 struct {
+	Name string
+	Age int
+}
+// Use Stringer by String() when you want to modify the output of fmt.Println()
+func (p Person2) String() string{
+	return fmt.Sprintf("My name is %v.", p.Name)
 }
 func typeAssertion() {
 	title := "typeAssertion"
