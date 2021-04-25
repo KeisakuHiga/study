@@ -98,6 +98,23 @@ func main() {
 	practice3()
 	goroutine()
 	channel()
+	bufferedChannel()
+}
+func bufferedChannel() {
+	title := "bufferedChannel"
+	fmt.Println("---", title, "---")
+	ch := make(chan int, 2)
+	ch <- 100
+	fmt.Println(len(ch))
+	ch <- 200
+	fmt.Println(len(ch))
+
+	// Close channel when it won't accept any value
+	close(ch)
+
+	for c := range ch{
+		fmt.Println(c)
+	}
 }
 func channel() {
 	title := "channel"
