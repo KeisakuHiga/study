@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"log"
 	"math"
 	"math/cmplx"
 	"math/rand"
-	"runtime"
-	"time"
-	"strings"
-	"strconv"
-	"io"
-	"log"
 	"os"
+	"runtime"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
 )
 func init() {
 	fmt.Println("Hello Go World!")
@@ -95,6 +96,30 @@ func main() {
 	stringer()
 	customError()
 	practice3()
+	goroutine()
+}
+func goroutine() {
+	title := "goroutine"
+	fmt.Println("---", title, "---")
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go normal("hello", &wg)
+	normal2("world")
+	wg.Wait()
+}
+func normal(s string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for i := 0; i < 5; i++ {
+		// time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+	// wg.Done()
+}
+func normal2(s string) {
+	for i := 0; i < 5; i++ {
+		// time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
 }
 func practice3() {
 	title := "practice3"
