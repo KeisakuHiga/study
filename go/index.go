@@ -102,7 +102,39 @@ func main() {
 	channelWithRangeAndClose()
 	producerAndConsumer()
 	fanOutFanIn()
+	channelAndSelect()
 }
+
+func channelAndSelect() {
+	title := "channelAndSelect"
+	fmt.Println("---", title, "---")
+	c4 := make(chan string)
+	c5 := make(chan int)
+	go goroutine4(c4)
+	go goroutine5(c5)
+
+	for {
+		select {
+		case msg1 := <- c4:
+			fmt.Println(msg1)
+		case msg2 := <- c5:
+			fmt.Println(msg2)
+		}
+	}
+}
+func goroutine4(ch chan<- string) {
+	for {
+		ch <- "packet from 4"
+		time.Sleep(1 * time.Second)
+	}
+}
+func goroutine5(ch chan<- int) {
+	for {
+		ch <- 100
+		time.Sleep(2 * time.Second)
+	}
+}
+
 
 func fanOutFanIn() {
 	title := "fanOutFanIn"
@@ -125,13 +157,13 @@ func producer2(first chan int) {
 		first <- i
 	}
 }
-func multi2(first chan int, second chan int) {
+func multi2(first <-chan int, second chan<- int) {
 	defer close(second)
 	for i := range first {
 		second <- i * 2
 	}
 }
-func multi4(second chan int, third chan int) {
+func multi4(second <-chan int, third chan<- int) {
 	defer close(third)
 	for i := range second {
 		third <- i * 4
