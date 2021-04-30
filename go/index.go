@@ -105,8 +105,29 @@ func main() {
 	// channelAndSelect()
 	defaultSelection()
 	syncMutex()
+	practice4()
 }
 
+func goroutine6(s []string, c chan string) {
+	defer close(c)
+	sum := ""
+	for _, v := range s {
+		sum += v
+		c <- sum
+	}
+}
+
+func practice4() {
+	title := "practice4"
+	fmt.Println("---", title, "---")
+
+	words := []string{"test1!", "test2!", "test3!", "test4!"}
+	c := make(chan string)
+	go goroutine6(words, c)
+	for w := range c {
+		fmt.Println(w)
+	}
+}
 type Counter struct {
 	v map[string]int
 	mux sync.Mutex
