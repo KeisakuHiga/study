@@ -90,7 +90,7 @@ console.log('x'.repeat(25) + ' 静的プロパティ・静的メソッド ' + 'x
 Human.version = '1.0'
 Human.walk = function () {
   return 'walk walk walk'
-}
+}　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　
 Human.eat = function () {
   return 'eat eat eat'
 }
