@@ -1,4 +1,7 @@
-var Animal = function () { }
+var Animal = function (name, age) {
+  this.name = name
+  this.age = age
+}
 Animal.prototype = {
   walk: function () {
     console.log('toko...toko...');
@@ -7,7 +10,7 @@ Animal.prototype = {
 
 var Dog = function () {
   // 継承してる
-  Animal.call(this)
+  Animal.call(this, 'John', 3)
 }
 // DogオブジェクトのプロトタイプとしてAnimalオブエクトのインスタンスをセット
 Dog.prototype = new Animal()
@@ -25,5 +28,6 @@ var d = new Dog()
 //  -> （最上位）Object.prototype
 d.walk()
 d.bark()
+console.log(d.name)
 
 
