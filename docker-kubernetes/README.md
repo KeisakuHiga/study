@@ -182,6 +182,70 @@
   $ minikube start
   $ minikube status
   ```
+- Podの起動
+  ```bash
+  $ kubectl run --image <imageName:tag> --restart Never <newPodName> // like 'docker run --image <imageName:tag> --name <newContainerName> <imageName>'
+  ```
+- Podの一覧取得
+  ```bash
+  $ kubectl get pods // like 'docker ps'
+  ```
+- Pod内のログ表示（Log）
+  ```bash
+  $ kubectl logs <podName> // like 'docker logs <containerName>'
+  ```
+- Podのメタデータ取得
+  ```bash
+  $ kubectl describe pod <podName> // like 'docker inspect <containerName>
+  ```
+- Podのなかにシェルで入る
+  ```bash
+  $ kubectl exec -it <podName> sh // like 'docker exec -it <containerName> sh
+  ```
+- Podを削除
+  ```bash
+  $ kubectl delete pod <podName> // like 'docker rm <containerName>'
+  ```
+- コンテナの環境変数の指定（`--env KEY=value`）
+  ```bash
+  $ kubectl run --env KEY=value --image <imageName:tag> --restart Never <newPodName> // like 'docker run --env KEY=value -d --name <newContainerName> <imageName>'
+  ```
+- コンテナのポート設定（`--port <portNumber>`）
+  ```bash
+  $ kubectl run --port <portNumber> --image <imageName:tag> --restart Never <newPodName>
+  ```
+- 
+  ```bash
+  $ 
+  ```
+- 
+  ```bash
+  $ 
+  ```
+- 
+  ```bash
+  $ 
+  ```
+- 
+  ```bash
+  $ 
+  ```
+- 
+  ```bash
+  $ 
+  ```
+- 
+  ```bash
+  $ 
+  ```
+- 
+  ```bash
+  $ 
+  ```
+- 
+  ```bash
+  $ 
+  ```
 - 
   ```bash
   $ 
