@@ -172,15 +172,17 @@
     $ docker service ps <service name>
     ```
 ## Kubernetes
-- install minikube/kubectl
+- minikube/kubectlのインストール
   ```bash
   $ brew install minikube
   $ brew install kubectl
   ```
-- minikube起動
+- minikube起動・ステータス確認・停止・削除
   ```bash
   $ minikube start
   $ minikube status
+  $ minikube stop
+  $ minikube delete
   ```
 - Podの起動
   ```bash
@@ -214,34 +216,38 @@
   ```bash
   $ kubectl run --port <portNumber> --image <imageName:tag> --restart Never <newPodName>
   ```
-- 
-  ```bash
-  $ 
-  ```
-- 
-  ```bash
-  $ 
-  ```
-- 
-  ```bash
-  $ 
-  ```
-- 
-  ```bash
-  $ 
-  ```
-- 
-  ```bash
-  $ 
-  ```
-- 
-  ```bash
-  $ 
-  ```
-- 
-  ```bash
-  $ 
-  ```
+- Service
+  - Serviceの一覧取得
+    ```bash
+    $ kubectl get service
+    ```
+  - ClusterIPタイプのServiceを作る
+    ```bash
+    $ kubectl expose pod <targetPodName> --type ClusterIP --port <portNumber> --name <newServiceName>
+    // 疎通確認のため、クラスター内にcurlコンテナを作ってClusterIPサービス経由でPodにアクセスしてみる。
+    $ kubectl run --restart Never --image curlimages/curl:7.68.0 -it --rm curl sh
+    $ # curl <newServiceName>:<portNumber>
+    ```
+  - NodePortタイプのServiceを作る
+    ```bash
+    $ kubectl expose pod <targetPodName> --type NodePort --port <portNumber> --name <newServiceName>
+    ```
+  - 
+    ```bash
+    $ 
+    ```
+  - 
+    ```bash
+    $ 
+    ```
+  - 
+    ```bash
+    $ 
+    ```
+  - 
+    ```bash
+    $ 
+    ```
 - 
   ```bash
   $ 
