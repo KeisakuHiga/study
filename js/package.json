@@ -1,0 +1,17 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "4.5.js",
+  "scripts": {
+    "start": "nodemon ./regexp/regexp.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "27.0.6",
+    "nodemon": "2.0.9"
+  }
+}
