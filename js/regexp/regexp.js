@@ -52,3 +52,24 @@ pattern = /^0\d{1,4}-\d{1,4}-\d{3,4}/
 str = '07-2-131'
 regexpMatchPattern(pattern, str)
 
+// 【【URL】http://もしくはhttps://から始まる正しい形式で入力されているか
+pattern = /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w-.\/?%&=]*)?/
+str = 'https://www.k/d/a/a/'
+regexpMatchPattern(pattern, str)
+
+// 【ユーザー名など】半角英数字で入力されているか
+pattern = /^[a-zA-Z0-9]+$/
+str = 'https'
+regexpMatchPattern(pattern, str)
+
+// 【テキスト入力】n文字以上m文字以下で入力されているか
+pattern = /^.{1,3}$/ // 1文字以上3文字以下
+str = 'htt'
+regexpMatchPattern(pattern, str)
+
+// 【テキスト入力】HTMLタグが含まれているか
+// \number: マッチグループの参照
+pattern = /[<(.*)>.*<\/\1>]/
+str = '<div>hello</div>'
+regexpMatchPattern(pattern, str)
+
